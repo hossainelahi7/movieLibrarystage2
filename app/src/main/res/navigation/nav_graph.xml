@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/launcher_home">
+
+    <fragment android:id="@+id/launcher_home"
+              android:label="ListView"
+              android:name="movielibrary.com.android.hossain.movieapplicationfragment.Fragment.MovieListViewFragment" >
+        <action
+            android:id="@+id/action_launcher_home_to_movie_detailed_view"
+            app:destination="@id/movie_detailed_view" />
+        <argument
+            android:name="MOVIE_ID"
+            android:defaultValue="269149"
+            app:type="integer" />
+    </fragment>
+
+    <fragment android:id="@+id/movie_detailed_view"
+              android:label="DetailsView"
+              android:name="movielibrary.com.android.hossain.movieapplicationfragment.Fragment.DetailsViewFragment" >
+        <action
+            android:id="@+id/movie_detailed_view_to_launcher_home"
+            app:popUpTo="@+id/launcher_home" >
+        </action>
+        <argument
+            android:name="MOVIE_TYPE"
+            android:defaultValue="0"
+            app:type="integer" />
+    </fragment>
+</navigation>

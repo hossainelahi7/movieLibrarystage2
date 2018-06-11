@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">MovieLibrary</string>
+    <string name="top_movie">Popular Movie</string>
+    <string name="top_tv">Popular TV Series</string>
+    <string name="top_rated_movie">Top Rated Movie</string>
+    <string name="entry_title">Movie Title</string>
+    <string name="entry_rating">Rating</string>
+    <string name="entry_description">This is a container to hold description of your movie entry</string>
+    <string name="entry_popularity">Popularity</string>
+    <string name="entry_image_description">This view contains a image of the entry you selected.</string>
+    <string name="popularity_text">Popularity</string>
+    <string name="rating_text">User Rating</string>
+    <string name="entry_release_date">Release Date</string>
+    <string name="trailer_text">Trailer</string>
+    <string name="reviewer_name">Name</string>
+    <string name="review">Review</string>
+    <string name="review_url">Review URL</string>
+    <string name="mark_as_fav">Mark As Favorite</string>
+    <string name="unmark_as_Fav">Remove From Favorite</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

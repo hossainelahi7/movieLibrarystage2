@@ -1,0 +1,57 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "b5c7407727076009c9788a5187f1fdf8",
+    "entities": [
+      {
+        "tableName": "movie_review_info_db",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`review_id` TEXT NOT NULL, `review_author` TEXT NOT NULL, `review_content` TEXT NOT NULL, `review_urls` TEXT NOT NULL, `movie_id` INTEGER NOT NULL, PRIMARY KEY(`review_id`))",
+        "fields": [
+          {
+            "fieldPath": "review_id",
+            "columnName": "review_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "review_author",
+            "columnName": "review_author",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "review_content",
+            "columnName": "review_content",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "review_urls",
+            "columnName": "review_urls",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "movie_id",
+            "columnName": "movie_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "review_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b5c7407727076009c9788a5187f1fdf8\")"
+    ]
+  }
+}

@@ -1,0 +1,58 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "movielibrary.com.android.hossain.movieapplicationfragment"
+        minSdkVersion 22
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "MOVIE_API_KEY", "\"83265a52c0549c882baf9e94cb6a8640\"")
+        buildConfigField("String", "MOVIE_TABLE_NAME", "\"movie_info_table\"")
+        buildConfigField("String", "MOVIE_DB_NAME", "\"movie_info_db\"")
+        buildConfigField("String", "MOVIE_VIDEO_DB_NAME", "\"movie_video_info_db\"")
+        buildConfigField("String", "MOVIE_REVIEW_DB_NAME", "\"movie_review_info_db\"")
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support:appcompat-v7:$rootProject.supportVersion"
+    implementation "com.android.support.constraint:constraint-layout:1.1.1"
+    implementation "com.android.support:support-v4:$rootProject.supportVersion"
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    // Room components
+    implementation "android.arch.persistence.room:runtime:$rootProject.roomVersion"
+    annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"
+    androidTestImplementation "android.arch.persistence.room:testing:$rootProject.roomVersion"
+
+    // Lifecycle components
+    implementation "android.arch.lifecycle:extensions:$rootProject.archLifecycleVersion"
+    annotationProcessor "android.arch.lifecycle:compiler:$rootProject.archLifecycleVersion"
+
+    //picasso
+    implementation "com.squareup.picasso:picasso:2.5.2"
+
+    //recyclerview
+    implementation "com.android.support:recyclerview-v7:27.1.1"
+
+    // Navigation
+    implementation "android.arch.navigation:navigation-fragment:$rootProject.navigationVersion"
+    implementation "android.arch.navigation:navigation-ui:$rootProject.navigationVersion"
+}

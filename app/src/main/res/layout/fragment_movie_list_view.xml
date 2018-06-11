@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Fragment.MovieListViewFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/TopManu"
+            android:id="@+id/top_movie"
+            android:text="@string/top_movie"
+            android:onClick="prioritySelected"/>
+        <TextView
+            style="@style/TopManu"
+            android:id="@+id/top_rated_movie"
+            android:text="@string/top_rated_movie"
+            android:onClick="prioritySelected"/>
+        <TextView
+            style="@style/TopManu"
+            android:id="@+id/top_tv"
+            android:text="@string/top_tv"
+            android:onClick="prioritySelected"/>
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/movie_recycle_view">
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>
