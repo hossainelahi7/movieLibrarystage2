@@ -6,13 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import com.facebook.stetho.Stetho;
 
 import movielibrary.com.android.hossain.movieapplicationfragment.MovieInfoDataBase.MovieDBRepository;
-import movielibrary.com.android.hossain.movieapplicationfragment.MovieReviewDataBase.ReviewDBRepository;
-import movielibrary.com.android.hossain.movieapplicationfragment.MovieVideoDataBase.VideoDBRepository;
 
 public class MainActivity extends AppCompatActivity {
     public static MovieDBRepository movieDB;
-    public static VideoDBRepository videoDb;
-    public static ReviewDBRepository reviewDB;
 
 
 
@@ -22,8 +18,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Stetho.initializeWithDefaults(this);
         movieDB = new MovieDBRepository(this.getApplication());
-        videoDb = new VideoDBRepository(this.getApplication());
-        reviewDB = new ReviewDBRepository(this.getApplication());
     }
 
 

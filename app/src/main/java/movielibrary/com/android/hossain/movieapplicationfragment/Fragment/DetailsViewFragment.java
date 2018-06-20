@@ -29,8 +29,6 @@ import movielibrary.com.android.hossain.movieapplicationfragment.Data.ReviewData
 import movielibrary.com.android.hossain.movieapplicationfragment.Data.VideoData;
 import movielibrary.com.android.hossain.movieapplicationfragment.MainActivity;
 import movielibrary.com.android.hossain.movieapplicationfragment.MovieInfoDataBase.MovieDBRepository;
-import movielibrary.com.android.hossain.movieapplicationfragment.MovieReviewDataBase.ReviewDBRepository;
-import movielibrary.com.android.hossain.movieapplicationfragment.MovieVideoDataBase.VideoDBRepository;
 import movielibrary.com.android.hossain.movieapplicationfragment.NetworkUtil.MovieDBAPI;
 import movielibrary.com.android.hossain.movieapplicationfragment.R;
 import movielibrary.com.android.hossain.movieapplicationfragment.RecyclerView.MovieReviewRecylerAdapter;
@@ -147,11 +145,9 @@ public class DetailsViewFragment extends Fragment {
         protected Void doInBackground(Integer... integers) {
             if (integers.length>0){
                 MovieDBRepository movieDB = MainActivity.movieDB;
-                VideoDBRepository videoDb = MainActivity.videoDb;
-                ReviewDBRepository reviewDB = MainActivity.reviewDB;
                 mMovieData = movieDB.getMovieDetailsInfo(integers[0]);
-                mVideoData = videoDb.getVideoofMovie(integers[0]);
-                mReviewData = reviewDB.getReviewofMovie(integers[0]);
+                mVideoData = movieDB.getVideoofMovie(integers[0]);
+                mReviewData = movieDB.getReviewofMovie(integers[0]);
 //                onResume();
             }
             return null;

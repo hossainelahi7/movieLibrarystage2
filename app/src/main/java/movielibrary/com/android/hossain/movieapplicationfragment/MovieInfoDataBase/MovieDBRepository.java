@@ -6,14 +6,21 @@ import android.arch.lifecycle.MutableLiveData;
 import java.util.List;
 
 import movielibrary.com.android.hossain.movieapplicationfragment.Data.MovieInfo;
+import movielibrary.com.android.hossain.movieapplicationfragment.Data.ReviewData;
+import movielibrary.com.android.hossain.movieapplicationfragment.Data.VideoData;
 import movielibrary.com.android.hossain.movieapplicationfragment.DataUtil.DataSync;
 
 public class MovieDBRepository {
     private MovieInfoDao mMovieInfoDao;
+    private MovieReviewDao mMovieReviewDao;
+    private MovieVideoDao mMovieVideoDao;
+
 
     public MovieDBRepository(Application application){
         MovieInfoDatabase db = MovieInfoDatabase.getDatabase(application);
         mMovieInfoDao = db.movieInfoDao();
+        mMovieReviewDao = db.movieReviewDao();
+        mMovieVideoDao = db.movieVideoDao();
     }
 
     public MutableLiveData<List<MovieInfo>> getPopularMovieInfoList() {
@@ -49,6 +56,37 @@ public class MovieDBRepository {
 
     public MovieInfo getMovieDetailsInfo(int id){
         return mMovieInfoDao.getMovieInfoDetails(id);
+    }
+
+
+    public MutableLiveData<List<ReviewData>> getReviewofMovie(int movieID) {
+        List<ReviewData> reviewDataList = mMovieReviewDao.getReviwForMovie(movieID);
+        if(reviewDataList == null || reviewDataList.size()<=0){
+            reviewDataList = DataSync.syncReviewData(movieID);
+            mMovieReviewDao.insertAll(reviewDataList);
+        }
+        MutableLiveData<List<ReviewData>> data = new MutableLiveData<>();
+        data.postValue(reviewDataList);
+        return data;
+    }
+
+    public void insert(ReviewData... movieReview){
+        mMovieReviewDao.insert(movieReview);
+    }
+
+    public MutableLiveData<List<VideoData>> getVideoofMovie(int movieID) {
+        List<VideoData> reviewDataList = mMovieVideoDao.getVideoForMovie(movieID);
+        if(reviewDataList == null || reviewDataList.size()<=0){
+            reviewDataList = DataSync.syncVideoData(movieID);
+            mMovieVideoDao.insertAll(reviewDataList);
+        }
+        MutableLiveData<List<VideoData>> videoData = new MutableLiveData<>();
+        videoData.postValue(reviewDataList);
+        return videoData;
+    }
+
+    public void insert(VideoData... movieVideo){
+        mMovieVideoDao.insert(movieVideo);
     }
 
 }

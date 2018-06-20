@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "fec9fd2289817233ff0923a3cf25717f",
+    "identityHash": "be14cda400542e3a26011e0b5546b5ee",
     "entities": [
       {
         "tableName": "movie_info_table",
@@ -113,11 +113,123 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "movie_review_info_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`review_id` TEXT NOT NULL, `review_author` TEXT NOT NULL, `review_content` TEXT NOT NULL, `review_urls` TEXT NOT NULL, `movie_id` INTEGER NOT NULL, PRIMARY KEY(`review_id`))",
+        "fields": [
+          {
+            "fieldPath": "review_id",
+            "columnName": "review_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "review_author",
+            "columnName": "review_author",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "review_content",
+            "columnName": "review_content",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "review_urls",
+            "columnName": "review_urls",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "movie_id",
+            "columnName": "movie_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "review_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "movie_video_info_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`video_id` TEXT NOT NULL, `ios_639_1` TEXT NOT NULL, `iso_3166_1` TEXT NOT NULL, `video_key` TEXT NOT NULL, `video_name` TEXT NOT NULL, `site` TEXT NOT NULL, `video_size` INTEGER NOT NULL, `video_type` TEXT NOT NULL, `movie_id` INTEGER NOT NULL, PRIMARY KEY(`video_id`))",
+        "fields": [
+          {
+            "fieldPath": "video_id",
+            "columnName": "video_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ios_639_1",
+            "columnName": "ios_639_1",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "iso_3166_1",
+            "columnName": "iso_3166_1",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "video_key",
+            "columnName": "video_key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "video_name",
+            "columnName": "video_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "site",
+            "columnName": "site",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "video_size",
+            "columnName": "video_size",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "video_type",
+            "columnName": "video_type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "movie_id",
+            "columnName": "movie_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "video_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"fec9fd2289817233ff0923a3cf25717f\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"be14cda400542e3a26011e0b5546b5ee\")"
     ]
   }
 }

@@ -1,4 +1,4 @@
-package movielibrary.com.android.hossain.movieapplicationfragment.MovieVideoDataBase;
+package movielibrary.com.android.hossain.movieapplicationfragment.MovieInfoDataBase;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;

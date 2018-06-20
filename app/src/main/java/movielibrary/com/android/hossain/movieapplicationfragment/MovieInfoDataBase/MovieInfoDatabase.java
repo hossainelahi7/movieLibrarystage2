@@ -9,10 +9,15 @@ import android.support.annotation.NonNull;
 
 import movielibrary.com.android.hossain.movieapplicationfragment.BuildConfig;
 import movielibrary.com.android.hossain.movieapplicationfragment.Data.MovieInfo;
+import movielibrary.com.android.hossain.movieapplicationfragment.Data.ReviewData;
+import movielibrary.com.android.hossain.movieapplicationfragment.Data.VideoData;
 
-@Database(entities = {MovieInfo.class}, version = 1)
+@Database(entities = {MovieInfo.class, ReviewData.class, VideoData.class}, version = 1)
 public abstract class MovieInfoDatabase extends RoomDatabase {
     abstract MovieInfoDao movieInfoDao();
+    abstract MovieVideoDao movieVideoDao();
+    abstract MovieReviewDao movieReviewDao();
+
 
     private static MovieInfoDatabase INSTANCE;
 
@@ -25,7 +30,6 @@ public abstract class MovieInfoDatabase extends RoomDatabase {
                             MovieInfoDatabase.class, BuildConfig.MOVIE_DB_NAME)
                             .addCallback(sRoomDatabaseCallback)
                             .build();
-//                    new PopulateDbAsync(INSTANCE).execute();
                 }
             }
         }
@@ -36,27 +40,7 @@ public abstract class MovieInfoDatabase extends RoomDatabase {
         @Override
         public void onOpen (@NonNull SupportSQLiteDatabase db){
             super.onOpen(db);
-//            new PopulateDbAsync(INSTANCE).execute();
         }
     };
-
-
-//    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
-//
-//        private final MovieInfoDao mDao;
-//
-//        PopulateDbAsync(MovieInfoDatabase db) {
-//            mDao = db.movieInfoDao();
-//        }
-//
-//        @Override
-//        protected Void doInBackground(final Void... params) {
-//            List<MovieInfo> movieInfos = DataSync.syncPopularMovies();
-//            mDao.insertAll(movieInfos);
-//            movieInfos = DataSync.syncTopMovies();
-//            mDao.insertAll(movieInfos);
-//            return null;
-//        }
-//    }
 
 }
