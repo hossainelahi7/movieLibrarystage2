@@ -4,12 +4,10 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-import org.json.JSONObject;
-
 import movielibrary.com.android.hossain.movieapplicationfragment.BuildConfig;
 
-@Entity(tableName = BuildConfig.MOVIE_VIDEO_DB_NAME)
-public class VideoData extends JSONObject {
+@Entity(tableName = BuildConfig.MOVIE_VIDEO_TABLE_NAME)
+public class VideoData {
 
     @PrimaryKey
     @NonNull

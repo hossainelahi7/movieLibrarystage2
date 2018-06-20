@@ -2,10 +2,10 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "cdad354996cb6e57a3ed01aedfb774b1",
+    "identityHash": "59cd183765f976c93c66b842fe0eb74a",
     "entities": [
       {
-        "tableName": "movie_video_info_db",
+        "tableName": "movie_video_info_table",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`video_id` TEXT NOT NULL, `ios_639_1` TEXT NOT NULL, `iso_3166_1` TEXT NOT NULL, `video_key` TEXT NOT NULL, `video_name` TEXT NOT NULL, `site` TEXT NOT NULL, `video_size` INTEGER NOT NULL, `video_type` TEXT NOT NULL, `movie_id` INTEGER NOT NULL, PRIMARY KEY(`video_id`))",
         "fields": [
           {
@@ -75,7 +75,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"cdad354996cb6e57a3ed01aedfb774b1\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"59cd183765f976c93c66b842fe0eb74a\")"
     ]
   }
 }

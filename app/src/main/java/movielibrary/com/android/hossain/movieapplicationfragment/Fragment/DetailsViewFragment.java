@@ -27,6 +27,7 @@ import java.util.List;
 import movielibrary.com.android.hossain.movieapplicationfragment.Data.MovieInfo;
 import movielibrary.com.android.hossain.movieapplicationfragment.Data.ReviewData;
 import movielibrary.com.android.hossain.movieapplicationfragment.Data.VideoData;
+import movielibrary.com.android.hossain.movieapplicationfragment.MainActivity;
 import movielibrary.com.android.hossain.movieapplicationfragment.MovieInfoDataBase.MovieDBRepository;
 import movielibrary.com.android.hossain.movieapplicationfragment.MovieReviewDataBase.ReviewDBRepository;
 import movielibrary.com.android.hossain.movieapplicationfragment.MovieVideoDataBase.VideoDBRepository;
@@ -114,9 +115,9 @@ public class DetailsViewFragment extends Fragment {
         @Override
         protected Void doInBackground(Integer... movieid) {
             if (movieid.length > 0) {
-                MovieDBRepository movieDB = new MovieDBRepository(mContext);
+                MovieDBRepository movieDB = MainActivity.movieDB;
                 MovieInfo mMovieData = movieDB.getMovieDetailsInfo(movieid[0]);
-                mMovieData.user_choice = 1;
+                mMovieData.user_choice = (mMovieData.user_choice == 0)? 1 : 0;
                 movieDB.insert(mMovieData);
             }
             return null;
@@ -133,19 +134,21 @@ public class DetailsViewFragment extends Fragment {
     private class LoadMovieInfo extends AsyncTask<Integer, Void, Void> {
         LifecycleOwner owner;
         MovieInfo mMovieData;
+//        Application mApplication;
         MutableLiveData<List<VideoData>> mVideoData;
         MutableLiveData<List<ReviewData>> mReviewData;
 
         LoadMovieInfo(LifecycleOwner owner){
             this.owner = owner;
+//            this.mApplication = application;
         }
 
         @Override
         protected Void doInBackground(Integer... integers) {
             if (integers.length>0){
-                MovieDBRepository movieDB = new MovieDBRepository(mContext);
-                VideoDBRepository videoDb = new VideoDBRepository(mContext);
-                ReviewDBRepository reviewDB = new ReviewDBRepository(mContext);
+                MovieDBRepository movieDB = MainActivity.movieDB;
+                VideoDBRepository videoDb = MainActivity.videoDb;
+                ReviewDBRepository reviewDB = MainActivity.reviewDB;
                 mMovieData = movieDB.getMovieDetailsInfo(integers[0]);
                 mVideoData = videoDb.getVideoofMovie(integers[0]);
                 mReviewData = reviewDB.getReviewofMovie(integers[0]);

@@ -38,7 +38,7 @@ public interface MovieInfoDao {
     @Query("DELETE FROM "+ BuildConfig.MOVIE_TABLE_NAME)
     void deleteAll();
 
-    @Query("SELECT * from "+BuildConfig.MOVIE_TABLE_NAME+" WHERE movie_id = :id ORDER BY avg_vote ASC")
+    @Query("SELECT * from "+BuildConfig.MOVIE_TABLE_NAME+" WHERE movie_id = :id LIMIT 1")
     MovieInfo getMovieInfoDetails(int id);
 
 }

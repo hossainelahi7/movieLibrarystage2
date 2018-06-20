@@ -1,7 +1,7 @@
 package movielibrary.com.android.hossain.movieapplicationfragment.MovieReviewDataBase;
 
+import android.app.Application;
 import android.arch.lifecycle.MutableLiveData;
-import android.content.Context;
 
 import java.util.List;
 
@@ -12,15 +12,16 @@ public class ReviewDBRepository{
 
     private MovieReviewDao mMovieReviewDao;
 
-    public ReviewDBRepository(Context context){
-        MovieReviewDatabase db = MovieReviewDatabase.getDatabase(context);
+    public ReviewDBRepository(Application application){
+        MovieReviewDatabase db = MovieReviewDatabase.getDatabase(application);
         mMovieReviewDao = db.movieReviewDao();
     }
 
     public MutableLiveData<List<ReviewData>> getReviewofMovie(int movieID) {
         List<ReviewData> reviewDataList = mMovieReviewDao.getReviwForMovie(movieID);
-        if(!(reviewDataList.size()>0)){
+        if(reviewDataList == null || reviewDataList.size()<=0){
             reviewDataList = DataSync.syncReviewData(movieID);
+            mMovieReviewDao.insertAll(reviewDataList);
         }
         MutableLiveData<List<ReviewData>> data = new MutableLiveData<>();
         data.postValue(reviewDataList);

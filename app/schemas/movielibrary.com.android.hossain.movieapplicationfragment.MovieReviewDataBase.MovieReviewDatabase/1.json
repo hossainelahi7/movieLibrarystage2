@@ -2,10 +2,10 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b5c7407727076009c9788a5187f1fdf8",
+    "identityHash": "3fb0b63830a5970639934e9d3908bbed",
     "entities": [
       {
-        "tableName": "movie_review_info_db",
+        "tableName": "movie_review_info_table",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`review_id` TEXT NOT NULL, `review_author` TEXT NOT NULL, `review_content` TEXT NOT NULL, `review_urls` TEXT NOT NULL, `movie_id` INTEGER NOT NULL, PRIMARY KEY(`review_id`))",
         "fields": [
           {
@@ -51,7 +51,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b5c7407727076009c9788a5187f1fdf8\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"3fb0b63830a5970639934e9d3908bbed\")"
     ]
   }
 }

@@ -20,19 +20,19 @@ public interface MovieReviewDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<ReviewData> reviewData );
 
-    @Query("SELECT * from "+ BuildConfig.MOVIE_REVIEW_DB_NAME+" ORDER BY review_id ASC")
+    @Query("SELECT * from "+ BuildConfig.MOVIE_REVIEW_TABLE_NAME+" ORDER BY review_id ASC")
     List<ReviewData> getAllReview();
 
-    @Query("SELECT * from "+BuildConfig.MOVIE_REVIEW_DB_NAME+" WHERE movie_id = :movieId ORDER BY review_id ASC")
+    @Query("SELECT * from "+BuildConfig.MOVIE_REVIEW_TABLE_NAME+" WHERE movie_id = :movieId ORDER BY review_id ASC")
     List<ReviewData> getReviwForMovie(int movieId);
 
     @Delete
     void deleteEntry(ReviewData... reviewData);
 
-    @Query("DELETE FROM "+ BuildConfig.MOVIE_REVIEW_DB_NAME)
+    @Query("DELETE FROM "+ BuildConfig.MOVIE_REVIEW_TABLE_NAME)
     void deleteAll();
 
-    @Query("DELETE FROM "+ BuildConfig.MOVIE_REVIEW_DB_NAME+ " WHERE movie_id = :movie_id")
+    @Query("DELETE FROM "+ BuildConfig.MOVIE_REVIEW_TABLE_NAME +" WHERE movie_id = :movie_id")
     void deleteAllForMovie(int movie_id);
 
 }

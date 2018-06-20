@@ -24,9 +24,5 @@
             android:id="@+id/movie_detailed_view_to_launcher_home"
             app:popUpTo="@+id/launcher_home" >
         </action>
-        <argument
-            android:name="MOVIE_TYPE"
-            android:defaultValue="0"
-            app:type="integer" />
     </fragment>
 </navigation>

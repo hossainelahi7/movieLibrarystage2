@@ -20,19 +20,19 @@ public interface MovieVideoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<VideoData> videoData );
 
-    @Query("SELECT * from "+ BuildConfig.MOVIE_VIDEO_DB_NAME+" ORDER BY video_id ASC")
+    @Query("SELECT * from "+ BuildConfig.MOVIE_VIDEO_TABLE_NAME+" ORDER BY video_id ASC")
     List<VideoData> getAllVideo();
 
-    @Query("SELECT * from "+BuildConfig.MOVIE_VIDEO_DB_NAME+" WHERE movie_id = :movieId ORDER BY movie_id ASC")
+    @Query("SELECT * from "+BuildConfig.MOVIE_VIDEO_TABLE_NAME+" WHERE movie_id = :movieId ORDER BY movie_id ASC")
     List<VideoData> getVideoForMovie(int movieId);
 
     @Delete
     void deleteEntry(VideoData... videoData);
 
-    @Query("DELETE FROM "+ BuildConfig.MOVIE_VIDEO_DB_NAME)
+    @Query("DELETE FROM "+ BuildConfig.MOVIE_VIDEO_TABLE_NAME)
     void deleteAll();
 
-    @Query("DELETE FROM "+ BuildConfig.MOVIE_VIDEO_DB_NAME+ " WHERE movie_id = :movie_id")
+    @Query("DELETE FROM "+ BuildConfig.MOVIE_VIDEO_TABLE_NAME+ " WHERE movie_id = :movie_id")
     void deleteAllForMovie(int movie_id);
 
 }

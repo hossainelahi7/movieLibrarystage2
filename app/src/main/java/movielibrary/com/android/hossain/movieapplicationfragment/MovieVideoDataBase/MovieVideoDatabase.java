@@ -25,7 +25,7 @@ public abstract class MovieVideoDatabase extends RoomDatabase{
                     // Create database here
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             MovieVideoDatabase.class,
-                            BuildConfig.MOVIE_VIDEO_DB_NAME)
+                            BuildConfig.MOVIE_DB_NAME)
                             .addCallback(sVideoDatabaseCallback)
                             .build();
 //                    new MovieInfoDatabase.PopulateDbAsync(INSTANCE).execute();

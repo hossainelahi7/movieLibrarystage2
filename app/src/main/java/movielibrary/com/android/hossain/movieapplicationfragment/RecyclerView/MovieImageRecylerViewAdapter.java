@@ -71,14 +71,7 @@ public class MovieImageRecylerViewAdapter extends RecyclerView.Adapter<MovieImag
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-//            SharedPreferences pref = mContext.getSharedPreferences(mContext.getResources().getString(R.string.app_name),Context.MODE_PRIVATE);
-//            pref.edit().putInt("MOVIE_ID", mMovieData.get(position).movie_id);
-//            Intent detailsIntent = new Intent(mContext, DetailsActivity.class);
-//            detailsIntent.putExtra(DetailsActivity.ENTRY_TYPE, mMovieData[position].type);
-//            detailsIntent.putExtra(DetailsActivity.ENTRY_ID, mMovieData[position].id);
-//            mContext.startActivity(detailsIntent);
             Bundle bundle = new Bundle();
-
             bundle.putInt("MOVIE_ID", mMovieData.get(position).movie_id);
             Navigation.findNavController(view).navigate(R.id.movie_detailed_view, bundle);
         }

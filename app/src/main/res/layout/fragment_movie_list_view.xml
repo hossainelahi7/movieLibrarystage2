@@ -13,18 +13,15 @@
         <TextView
             style="@style/TopManu"
             android:id="@+id/top_movie"
-            android:text="@string/top_movie"
-            android:onClick="prioritySelected"/>
+            android:text="@string/top_movie" />
         <TextView
             style="@style/TopManu"
             android:id="@+id/top_rated_movie"
-            android:text="@string/top_rated_movie"
-            android:onClick="prioritySelected"/>
+            android:text="@string/top_rated_movie" />
         <TextView
             style="@style/TopManu"
             android:id="@+id/top_tv"
-            android:text="@string/top_tv"
-            android:onClick="prioritySelected"/>
+            android:text="@string/top_tv"/>
     </LinearLayout>
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"

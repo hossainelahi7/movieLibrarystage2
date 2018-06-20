@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 
 import movielibrary.com.android.hossain.movieapplicationfragment.BuildConfig;
 
-@Entity(tableName = BuildConfig.MOVIE_REVIEW_DB_NAME)
+@Entity(tableName = BuildConfig.MOVIE_REVIEW_TABLE_NAME)
 public class ReviewData {
 
     @PrimaryKey

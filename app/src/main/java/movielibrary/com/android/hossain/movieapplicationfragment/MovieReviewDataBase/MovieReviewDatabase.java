@@ -25,7 +25,7 @@ public abstract class MovieReviewDatabase extends RoomDatabase{
                     // Create database here
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             MovieReviewDatabase.class,
-                            BuildConfig.MOVIE_REVIEW_DB_NAME)
+                            BuildConfig.MOVIE_DB_NAME)
                             .addCallback(sReviewDatabaseCallback)
                             .build();
 //                    new MovieInfoDatabase.PopulateDbAsync(INSTANCE).execute();
