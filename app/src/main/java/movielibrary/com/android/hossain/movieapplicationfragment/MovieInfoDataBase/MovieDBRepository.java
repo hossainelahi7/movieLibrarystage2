@@ -38,6 +38,7 @@ public class MovieDBRepository {
         List<MovieInfo> movieInfos = mMovieInfoDao.getTopMovies();
         if(movieInfos == null || movieInfos.size()<=0){
             movieInfos = DataSync.syncTopMovies();
+            mMovieInfoDao.insertAll(movieInfos);
         }
         MutableLiveData<List<MovieInfo>> data = new MutableLiveData<>();
         data.postValue(movieInfos);
@@ -63,7 +64,8 @@ public class MovieDBRepository {
         List<ReviewData> reviewDataList = mMovieReviewDao.getReviwForMovie(movieID);
         if(reviewDataList == null || reviewDataList.size()<=0){
             reviewDataList = DataSync.syncReviewData(movieID);
-            mMovieReviewDao.insertAll(reviewDataList);
+            if(reviewDataList != null)
+                mMovieReviewDao.insertAll(reviewDataList);
         }
         MutableLiveData<List<ReviewData>> data = new MutableLiveData<>();
         data.postValue(reviewDataList);

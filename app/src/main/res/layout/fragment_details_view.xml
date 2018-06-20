@@ -9,6 +9,12 @@ android:orientation="vertical">
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
+    <TextView
+        style="@style/TitleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/entry_title"
+        android:id="@+id/movie_title"/>
     <ImageView
         style="@style/Image"
         android:id="@+id/entry_image"

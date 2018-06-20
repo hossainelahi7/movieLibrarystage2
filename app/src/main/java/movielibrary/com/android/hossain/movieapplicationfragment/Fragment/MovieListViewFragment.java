@@ -25,7 +25,6 @@ import java.util.List;
 import movielibrary.com.android.hossain.movieapplicationfragment.Data.MovieInfo;
 import movielibrary.com.android.hossain.movieapplicationfragment.DataUtil.Translator;
 import movielibrary.com.android.hossain.movieapplicationfragment.MainActivity;
-import movielibrary.com.android.hossain.movieapplicationfragment.MovieInfoDataBase.MovieDBRepository;
 import movielibrary.com.android.hossain.movieapplicationfragment.R;
 import movielibrary.com.android.hossain.movieapplicationfragment.RecyclerView.MovieImageRecylerViewAdapter;
 
@@ -34,11 +33,10 @@ import movielibrary.com.android.hossain.movieapplicationfragment.RecyclerView.Mo
  */
 public class MovieListViewFragment extends Fragment{
 
-    MovieDBRepository repo;
     private MovieImageRecylerViewAdapter mMovieAdapter;
     private RecyclerView mMovieView;
     private LoadData loadData;
-    private int movieType = Translator.POPUPAR_MOVIE;
+    private MutableLiveData<Integer> movieType = new MutableLiveData();
 
 
     @Override
@@ -55,6 +53,7 @@ public class MovieListViewFragment extends Fragment{
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        movieType.setValue(Translator.POPUPAR_MOVIE);
         mMovieView = getActivity().findViewById(R.id.movie_recycle_view);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
         mMovieView.setLayoutManager(layoutManager);
@@ -71,48 +70,51 @@ public class MovieListViewFragment extends Fragment{
     @Override
     public void onStart() {
         super.onStart();
-        repo = MainActivity.movieDB;
-        loadData = new LoadData(repo, getLifecycleOwner(getContext()));
-        loadData.execute(movieType);
+        loadData = new LoadData(getLifecycleOwner(getContext()));
+        loadData.execute(Translator.POPUPAR_MOVIE);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        movieType.observe(getLifecycleOwner(getContext()), new Observer<Integer>(){
+            @Override
+            public void onChanged(@Nullable Integer type) {
+                loadData = new LoadData(getLifecycleOwner(getContext()));
+                loadData.execute(type);
+            }
+        });
     }
 
-//    public void prioritySelected(View view) {
-//
-//    }
+    public void prioritySelected(View view) {
+        switch (view.getId()){
+            case R.id.top_movie:
+                movieType.setValue(Translator.POPUPAR_MOVIE);
+                break;
+            case R.id.top_tv:
+                movieType.setValue(Translator.USER_LISTED);
+                break;
+            case R.id.top_rated_movie:
+                movieType.setValue(Translator.TOP_RATED_MOVIE);
+                break;
+            default:
+                movieType.setValue(Translator.POPUPAR_MOVIE);
+                break;
+        }
+
+    }
 
 //    @Override
 //    public void onClick(View v) {
-//        switch (v.getId()){
-//            case R.id.top_movie:
-//                movieType = Translator.POPUPAR_MOVIE;
-//                break;
-//            case R.id.top_tv:
-//                movieType = Translator.USER_LISTED;
-//                break;
-//            case R.id.top_rated_movie:
-//                movieType = Translator.TOP_RATED_MOVIE;
-//                break;
-//            default:
-//                movieType = Translator.POPUPAR_MOVIE;
-//                break;
-//        }
-//        if(loadData.getStatus() == AsyncTask.Status.FINISHED)
-//            loadData.execute();
+//        Log.d("Clicked", "on view"+v.getId());
+//        prioritySelected(v);
 //    }
 
-
     private class LoadData extends AsyncTask<Integer, Void, Boolean> {
-        private MovieDBRepository repo;
         private LifecycleOwner owner;
         MutableLiveData<List<MovieInfo>> movieInfo;
 
-        public LoadData(MovieDBRepository repository, LifecycleOwner own){
-            repo = repository;
+        public LoadData(LifecycleOwner own){
             owner = own;
         }
 
@@ -128,16 +130,16 @@ public class MovieListViewFragment extends Fragment{
                 return false;
             switch (ints[0]){
                 case Translator.POPUPAR_MOVIE:
-                    movieInfo = repo.getPopularMovieInfoList();
+                    movieInfo = MainActivity.movieDB.getPopularMovieInfoList();
                     break;
                 case Translator.TOP_RATED_MOVIE:
-                    movieInfo = repo.getPopularMovieInfoList();
+                    movieInfo = MainActivity.movieDB.getPopularMovieInfoList();
                     break;
                 case Translator.USER_LISTED:
-                    movieInfo = repo.getUserChoiceMovieInfo();
+                    movieInfo = MainActivity.movieDB.getUserChoiceMovieInfo();
                     break;
                 default:
-                    movieInfo = repo.getPopularMovieInfoList();
+                    movieInfo = MainActivity.movieDB.getPopularMovieInfoList();
                     break;
             }
             return true;

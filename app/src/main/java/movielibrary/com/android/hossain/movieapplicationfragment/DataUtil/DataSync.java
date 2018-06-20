@@ -49,6 +49,8 @@ public class DataSync {
         String movieReviewDataResponse = MovieDBAPI.getMovieReviewResponse(movieId);
         if(movieReviewDataResponse != null){
             JSONArray responseArray = JsonUtil.convertReportToArray(movieReviewDataResponse);
+            if(responseArray == null || responseArray.length()<=0)
+                return null;
             for(int i= 0; i < responseArray.length(); i++){
                 try {
                     reviewDataList.add(Translator.convertToReviewData(responseArray.getJSONObject(i), movieId));

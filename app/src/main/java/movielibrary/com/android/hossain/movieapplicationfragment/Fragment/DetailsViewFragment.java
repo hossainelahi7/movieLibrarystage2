@@ -41,6 +41,7 @@ public class DetailsViewFragment extends Fragment {
 
     private Context mContext;
     private int MovieID;
+    private TextView titleView;
     private ImageView imageView;
     private TextView descriptionView;
     private TextView popularityView;
@@ -62,6 +63,7 @@ public class DetailsViewFragment extends Fragment {
         Log.d("DETAILS", String.valueOf(getArguments().getInt("MOVIE_ID")));
         mContext = getContext();
         MovieID = getArguments().getInt("MOVIE_ID");
+        titleView = this.getActivity().findViewById(R.id.movie_title);
         imageView = this.getActivity().findViewById(R.id.entry_image);
         descriptionView = this.getActivity().findViewById(R.id.entry_description);
         popularityView = this.getActivity().findViewById(R.id.entry_popularity);
@@ -156,6 +158,7 @@ public class DetailsViewFragment extends Fragment {
         @Override
         protected void onPostExecute( Void vo) {
             super.onPostExecute(vo);
+            titleView.setText(mMovieData.movie_title);
             Picasso.with(mContext).
                     load(MovieDBAPI.getApiImageUrl(mMovieData.posterpath)).
                     placeholder(R.mipmap.loading_image_place_holder).
