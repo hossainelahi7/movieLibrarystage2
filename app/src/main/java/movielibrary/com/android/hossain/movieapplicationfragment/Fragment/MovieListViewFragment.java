@@ -14,7 +14,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,14 +33,17 @@ import movielibrary.com.android.hossain.movieapplicationfragment.RecyclerView.Mo
  */
 public class MovieListViewFragment extends Fragment{
 
+    private Context mContext;
     private MovieImageRecylerViewAdapter mMovieAdapter;
     private RecyclerView mMovieView;
     private LoadData loadData;
-    private MutableLiveData<Integer> movieType = new MutableLiveData();
+    private Integer movieType = Translator.POPUPAR_MOVIE;
+    private MutableLiveData<Integer> movieTypeLive = new MutableLiveData();
     private Button populerMovie;
     private Button topRatedMovie;
     private Button userListMovie;
     private LifecycleOwner lifecycleOwner;
+    private MutableLiveData<List<MovieInfo>> movieInfo = new MutableLiveData<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,8 +58,9 @@ public class MovieListViewFragment extends Fragment{
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        mContext = getContext();
         super.onActivityCreated(savedInstanceState);
-        movieType.setValue(Translator.POPUPAR_MOVIE);
+        movieTypeLive.setValue(movieType);
         mMovieView = getActivity().findViewById(R.id.movie_recycle_view);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
         mMovieView.setLayoutManager(layoutManager);
@@ -67,21 +70,21 @@ public class MovieListViewFragment extends Fragment{
         populerMovie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                movieType.setValue(Translator.POPUPAR_MOVIE);
+                movieTypeLive.setValue(Translator.POPUPAR_MOVIE);
             }
         });
         topRatedMovie = getActivity().findViewById(R.id.top_rated_movie);
         topRatedMovie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                movieType.setValue(Translator.TOP_RATED_MOVIE);
+                movieTypeLive.setValue(Translator.TOP_RATED_MOVIE);
             }
         });
         userListMovie = getActivity().findViewById(R.id.user_listing);
         userListMovie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                movieType.setValue(Translator.USER_LISTED);
+                movieTypeLive.setValue(Translator.USER_LISTED);
             }
         });
     }
@@ -103,25 +106,35 @@ public class MovieListViewFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
-        movieType.observe(lifecycleOwner, new Observer<Integer>(){
+        movieTypeLive.observe(lifecycleOwner, new Observer<Integer>(){
             @Override
             public void onChanged(@Nullable Integer type) {
                 if(loadData.getStatus() != AsyncTask.Status.RUNNING){
                     loadData = new LoadData();
                     loadData.execute(type);
+                    movieType = type;
                 }
+            }
+        });
+        movieInfo.observe(lifecycleOwner, new Observer<List<MovieInfo>>() {
+            @Override
+            public void onChanged(@NonNull List<MovieInfo> movieInfos) {
+                if(movieInfos!=null && movieInfos.size() > 0)
+                    mMovieAdapter.setMoviedata(movieInfos);
+                else
+                    Toast.makeText(mContext, "There is no data for selected dataset", Toast.LENGTH_LONG);
             }
         });
     }
 
 
+
     private class LoadData extends AsyncTask<Integer, Void, Boolean> {
-        MutableLiveData<List<MovieInfo>> movieInfo;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(getContext(), "Data Loading .....", Toast.LENGTH_LONG);
+            Toast.makeText(mContext, "Data Loading .....", Toast.LENGTH_LONG);
         }
 
         @Override
@@ -130,16 +143,16 @@ public class MovieListViewFragment extends Fragment{
                 return false;
             switch (ints[0]){
                 case Translator.POPUPAR_MOVIE:
-                    movieInfo = MainActivity.movieDB.getPopularMovieInfoList();
+                    movieInfo.postValue(MainActivity.movieDB.getPopularMovieInfoList());
                     break;
                 case Translator.TOP_RATED_MOVIE:
-                    movieInfo = MainActivity.movieDB.getTopRatedMovieInfoList();
+                    movieInfo.postValue(MainActivity.movieDB.getTopRatedMovieInfoList());
                     break;
                 case Translator.USER_LISTED:
-                    movieInfo = MainActivity.movieDB.getUserChoiceMovieInfo();
+                    movieInfo.postValue(MainActivity.movieDB.getUserChoiceMovieInfo());
                     break;
                 default:
-                    movieInfo = MainActivity.movieDB.getPopularMovieInfoList();
+                    movieInfo.postValue(MainActivity.movieDB.getPopularMovieInfoList());
                     break;
             }
             return true;
@@ -150,14 +163,6 @@ public class MovieListViewFragment extends Fragment{
             super.onPostExecute(aVoid);
             if(aVoid == false)
                 return;
-            movieInfo.observe(lifecycleOwner, new Observer<List<MovieInfo>>() {
-                @Override
-                public void onChanged(@NonNull List<MovieInfo> movieInfos) {
-                    if(movieInfos!=null && movieInfos.size() > 0)
-                        mMovieAdapter.setMoviedata(movieInfos);
-                    Log.d("GetData", String.valueOf(movieInfos.size()));
-                }
-            });
             this.onCancelled();
         }
     }
@@ -170,8 +175,7 @@ public class MovieListViewFragment extends Fragment{
     @Override
     public void onStop() {
         super.onStop();
-        loadData.cancel(true);
-
+        movieType = movieTypeLive.getValue();
     }
 
     @Override

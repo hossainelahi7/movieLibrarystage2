@@ -23,68 +23,63 @@ public class MovieDBRepository {
         mMovieVideoDao = db.movieVideoDao();
     }
 
-    public MutableLiveData<List<MovieInfo>> getPopularMovieInfoList() {
+    public List<MovieInfo> getPopularMovieInfoList() {
         List<MovieInfo> movieInfos = mMovieInfoDao.getPopulerMovies();
         if(movieInfos == null || movieInfos.size()<=0){
             movieInfos = DataSync.syncPopularMovies();
             mMovieInfoDao.insertAll(movieInfos);
         }
-        MutableLiveData<List<MovieInfo>> data = new MutableLiveData<>();
-        data.postValue(movieInfos);
-        return data;
+        return movieInfos;
     }
 
-    public MutableLiveData<List<MovieInfo>> getTopRatedMovieInfoList() {
+    public List<MovieInfo> getTopRatedMovieInfoList() {
         List<MovieInfo> movieInfos = mMovieInfoDao.getTopMovies();
         if(movieInfos == null || movieInfos.size()<=0){
             movieInfos = DataSync.syncTopMovies();
             mMovieInfoDao.insertAll(movieInfos);
         }
-        MutableLiveData<List<MovieInfo>> data = new MutableLiveData<>();
-        data.postValue(movieInfos);
-        return data;
+        return movieInfos;
     }
 
-    public MutableLiveData<List<MovieInfo>> getUserChoiceMovieInfo (){
-        MutableLiveData<List<MovieInfo>> data = new MutableLiveData<>();
-        data.postValue(mMovieInfoDao.getUserChoiceMovies());
-        return data;
+    public List<MovieInfo> getUserChoiceMovieInfo (){
+        return mMovieInfoDao.getUserChoiceMovies();
     }
 
     public void insert(MovieInfo movieInfo){
         mMovieInfoDao.insert(movieInfo);
     }
 
-    public MovieInfo getMovieDetailsInfo(int id){
+    public MutableLiveData<MovieInfo> getMovieDetailsInfo(int id){
+        MutableLiveData<MovieInfo> data = new MutableLiveData<>();
+        data.postValue(mMovieInfoDao.getMovieInfoDetails(id));
+        return data;
+    }
+
+    public MovieInfo getMovieInfo(int id){
         return mMovieInfoDao.getMovieInfoDetails(id);
     }
 
-
-    public MutableLiveData<List<ReviewData>> getReviewofMovie(int movieID) {
+    public List<ReviewData> getReviewofMovie(int movieID) {
         List<ReviewData> reviewDataList = mMovieReviewDao.getReviwForMovie(movieID);
         if(reviewDataList == null || reviewDataList.size()<=0){
             reviewDataList = DataSync.syncReviewData(movieID);
             if(reviewDataList != null)
                 mMovieReviewDao.insertAll(reviewDataList);
         }
-        MutableLiveData<List<ReviewData>> data = new MutableLiveData<>();
-        data.postValue(reviewDataList);
-        return data;
+        return reviewDataList;
     }
 
     public void insert(ReviewData... movieReview){
         mMovieReviewDao.insert(movieReview);
     }
 
-    public MutableLiveData<List<VideoData>> getVideoofMovie(int movieID) {
-        List<VideoData> reviewDataList = mMovieVideoDao.getVideoForMovie(movieID);
-        if(reviewDataList == null || reviewDataList.size()<=0){
-            reviewDataList = DataSync.syncVideoData(movieID);
-            mMovieVideoDao.insertAll(reviewDataList);
+    public List<VideoData> getVideoofMovie(int movieID) {
+        List<VideoData> videoDataList = mMovieVideoDao.getVideoForMovie(movieID);
+        if(videoDataList == null || videoDataList.size()<=0){
+            videoDataList = DataSync.syncVideoData(movieID);
+            mMovieVideoDao.insertAll(videoDataList);
         }
-        MutableLiveData<List<VideoData>> videoData = new MutableLiveData<>();
-        videoData.postValue(reviewDataList);
-        return videoData;
+        return videoDataList;
     }
 
     public void insert(VideoData... movieVideo){
