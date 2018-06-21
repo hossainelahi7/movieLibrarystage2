@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.List;
@@ -37,7 +38,10 @@ public class MovieListViewFragment extends Fragment{
     private RecyclerView mMovieView;
     private LoadData loadData;
     private MutableLiveData<Integer> movieType = new MutableLiveData();
-
+    private Button populerMovie;
+    private Button topRatedMovie;
+    private Button userListMovie;
+    private LifecycleOwner lifecycleOwner;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +63,27 @@ public class MovieListViewFragment extends Fragment{
         mMovieView.setLayoutManager(layoutManager);
         mMovieAdapter = new MovieImageRecylerViewAdapter();
         mMovieView.setAdapter(mMovieAdapter);
+        populerMovie = getActivity().findViewById(R.id.top_movie);
+        populerMovie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                movieType.setValue(Translator.POPUPAR_MOVIE);
+            }
+        });
+        topRatedMovie = getActivity().findViewById(R.id.top_rated_movie);
+        topRatedMovie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                movieType.setValue(Translator.TOP_RATED_MOVIE);
+            }
+        });
+        userListMovie = getActivity().findViewById(R.id.user_listing);
+        userListMovie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                movieType.setValue(Translator.USER_LISTED);
+            }
+        });
     }
 
     @Override
@@ -70,53 +95,28 @@ public class MovieListViewFragment extends Fragment{
     @Override
     public void onStart() {
         super.onStart();
-        loadData = new LoadData(getLifecycleOwner(getContext()));
+        lifecycleOwner = getLifecycleOwner(getContext());
+        loadData = new LoadData();
         loadData.execute(Translator.POPUPAR_MOVIE);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        movieType.observe(getLifecycleOwner(getContext()), new Observer<Integer>(){
+        movieType.observe(lifecycleOwner, new Observer<Integer>(){
             @Override
             public void onChanged(@Nullable Integer type) {
-                loadData = new LoadData(getLifecycleOwner(getContext()));
-                loadData.execute(type);
+                if(loadData.getStatus() != AsyncTask.Status.RUNNING){
+                    loadData = new LoadData();
+                    loadData.execute(type);
+                }
             }
         });
     }
 
-    public void prioritySelected(View view) {
-        switch (view.getId()){
-            case R.id.top_movie:
-                movieType.setValue(Translator.POPUPAR_MOVIE);
-                break;
-            case R.id.top_tv:
-                movieType.setValue(Translator.USER_LISTED);
-                break;
-            case R.id.top_rated_movie:
-                movieType.setValue(Translator.TOP_RATED_MOVIE);
-                break;
-            default:
-                movieType.setValue(Translator.POPUPAR_MOVIE);
-                break;
-        }
-
-    }
-
-//    @Override
-//    public void onClick(View v) {
-//        Log.d("Clicked", "on view"+v.getId());
-//        prioritySelected(v);
-//    }
 
     private class LoadData extends AsyncTask<Integer, Void, Boolean> {
-        private LifecycleOwner owner;
         MutableLiveData<List<MovieInfo>> movieInfo;
-
-        public LoadData(LifecycleOwner own){
-            owner = own;
-        }
 
         @Override
         protected void onPreExecute() {
@@ -133,7 +133,7 @@ public class MovieListViewFragment extends Fragment{
                     movieInfo = MainActivity.movieDB.getPopularMovieInfoList();
                     break;
                 case Translator.TOP_RATED_MOVIE:
-                    movieInfo = MainActivity.movieDB.getPopularMovieInfoList();
+                    movieInfo = MainActivity.movieDB.getTopRatedMovieInfoList();
                     break;
                 case Translator.USER_LISTED:
                     movieInfo = MainActivity.movieDB.getUserChoiceMovieInfo();
@@ -150,8 +150,7 @@ public class MovieListViewFragment extends Fragment{
             super.onPostExecute(aVoid);
             if(aVoid == false)
                 return;
-//            mMovieAdapter.setMoviedata(movieInfo);
-            movieInfo.observe(owner, new Observer<List<MovieInfo>>() {
+            movieInfo.observe(lifecycleOwner, new Observer<List<MovieInfo>>() {
                 @Override
                 public void onChanged(@NonNull List<MovieInfo> movieInfos) {
                     if(movieInfos!=null && movieInfos.size() > 0)

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MovieLibrary</string>
     <string name="top_movie">Popular Movie</string>
-    <string name="top_tv">Popular TV Series</string>
+    <string name="user_listed">User Listed</string>
     <string name="top_rated_movie">Top Rated Movie</string>
     <string name="entry_title">Movie Title</string>
     <string name="entry_rating">Rating</string>

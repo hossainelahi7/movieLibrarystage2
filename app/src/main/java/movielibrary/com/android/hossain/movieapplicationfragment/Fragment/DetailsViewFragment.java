@@ -100,15 +100,7 @@ public class DetailsViewFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//            new LoadMovieInfo(this).execute(MovieID);
     }
-
-//    public void markAsFavorite(View view) {
-//        MovieDBRepository movieDB = new MovieDBRepository(mContext);
-//        MovieInfo mMovieData = movieDB.getMovieDetailsInfo(MovieID);
-//        mMovieData.user_choice = 1;
-//        movieDB.insert(mMovieData);
-//    }
 
     private class MarkASFavorite extends AsyncTask<Integer, Void, Void>{
 

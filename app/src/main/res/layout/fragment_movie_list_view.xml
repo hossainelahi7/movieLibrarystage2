@@ -10,18 +10,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <TextView
+        <Button
             style="@style/TopManu"
             android:id="@+id/top_movie"
             android:text="@string/top_movie" />
-        <TextView
+        <Button
             style="@style/TopManu"
             android:id="@+id/top_rated_movie"
             android:text="@string/top_rated_movie" />
-        <TextView
+        <Button
             style="@style/TopManu"
-            android:id="@+id/top_tv"
-            android:text="@string/top_tv"/>
+            android:id="@+id/user_listing"
+            android:text="@string/user_listed"/>
     </LinearLayout>
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
