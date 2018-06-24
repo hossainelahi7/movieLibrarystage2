@@ -2,8 +2,6 @@ package movielibrary.com.android.hossain.movieapplicationfragment.Fragment;
 
 
 import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,7 +25,6 @@ import movielibrary.com.android.hossain.movieapplicationfragment.Data.MovieInfo;
 import movielibrary.com.android.hossain.movieapplicationfragment.Data.ReviewData;
 import movielibrary.com.android.hossain.movieapplicationfragment.Data.VideoData;
 import movielibrary.com.android.hossain.movieapplicationfragment.MainActivity;
-import movielibrary.com.android.hossain.movieapplicationfragment.MovieInfoDataBase.MovieDBRepository;
 import movielibrary.com.android.hossain.movieapplicationfragment.NetworkUtil.MovieDBAPI;
 import movielibrary.com.android.hossain.movieapplicationfragment.R;
 import movielibrary.com.android.hossain.movieapplicationfragment.RecyclerView.MovieReviewRecylerAdapter;
@@ -52,13 +49,12 @@ public class DetailsViewFragment extends Fragment {
     private MovieReviewRecylerAdapter reviewRecyler;
     private MovieVideoRecyclerAdapter videoRecycler;
     private Button saveButton;
-    private MutableLiveData<MovieInfo> mMovieData = new MutableLiveData<>();
-    private MutableLiveData<List<ReviewData>> mReviewData = new MutableLiveData<>();
-    private MutableLiveData<List<VideoData>> mVideoData = new MutableLiveData<>();
+    private MovieInfo mMovieData ;
+    private List<ReviewData> mReviewData;
+    private List<VideoData> mVideoData;
 
 
     public DetailsViewFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -87,26 +83,6 @@ public class DetailsViewFragment extends Fragment {
         mReviewRecyclerView.setAdapter(reviewRecyler);
         mVideoRecyclerView.setAdapter(videoRecycler);
         saveButton  = this.getActivity().findViewById(R.id.save_as_favorite_button);
-
-        mMovieData.observe(owner, new Observer<MovieInfo>() {
-            @Override
-            public void onChanged(@Nullable MovieInfo movieInfo) {
-                new ViewMovieInfo().execute(movieInfo);
-            }
-        });
-        mVideoData.observe(owner, new Observer<List<VideoData>>() {
-            @Override
-            public void onChanged(@Nullable List<VideoData> videoData) {
-                videoRecycler.setData(videoData);
-            }
-        });
-        mReviewData.observe(owner, new Observer<List<ReviewData>>() {
-            @Override
-            public void onChanged(@Nullable List<ReviewData> reviewData) {
-                reviewRecyler.setData(reviewData);
-            }
-        });
-
         new LoadMovieInfo().execute(MovieID);
     }
 
@@ -122,7 +98,7 @@ public class DetailsViewFragment extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MarkASFavorite().execute(MovieID);
+                new MarkASFavorite().execute();
             }
         });
 
@@ -139,16 +115,13 @@ public class DetailsViewFragment extends Fragment {
         super.onDetach();
     }
 
-    private class MarkASFavorite extends AsyncTask<Integer, Void, Void>{
+    private class MarkASFavorite extends AsyncTask<Void, Void, Void>{
 
         @Override
-        protected Void doInBackground(Integer... movieid) {
-            if (movieid.length > 0) {
-                MovieDBRepository movieDB = MainActivity.movieDB;
-                MovieInfo movieInfo = movieDB.getMovieInfo(movieid[0]);
-                movieInfo.user_choice = (movieInfo.user_choice == 0)? 1 : 0;
-                movieDB.insert(movieInfo);
-                mMovieData.postValue(movieInfo);
+        protected Void doInBackground(Void... voids) {
+            if (mMovieData != null){
+                mMovieData.user_choice = (mMovieData.user_choice == 0)? 1 : 0;
+                MainActivity.movieDB.insert(mMovieData);
             }
             return null;
         }
@@ -156,56 +129,42 @@ public class DetailsViewFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            saveButton.setText((mMovieData.user_choice == 0)? getString(R.string.mark_as_fav) : getString(R.string.remove_from_fav));
         }
     }
 
 
-    private class LoadMovieInfo extends AsyncTask<Integer, Void, Void> {
+    private class LoadMovieInfo extends AsyncTask<Integer, Void, MovieInfo> {
 
         @Override
-        protected Void doInBackground(Integer... integers) {
-            if (integers.length>0){
-                MovieDBRepository movieDB = MainActivity.movieDB;
-                mMovieData.postValue(movieDB.getMovieInfo(integers[0]));
-                mVideoData.postValue(movieDB.getVideoofMovie(integers[0]));
-                mReviewData.postValue(movieDB.getReviewofMovie(integers[0]));
+        protected MovieInfo doInBackground(Integer... integers) {
+            if ( integers.length>0){
+                mMovieData = MainActivity.movieDB.getMovieInfo(integers[0]);
+                mVideoData = MainActivity.movieDB.getVideoofMovie(mMovieData.movie_id);
+                mReviewData = MainActivity.movieDB.getReviewofMovie(mMovieData.movie_id);
             }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute( Void vo) {
-            super.onPostExecute(vo);
-        }
-    }
-
-    private class ViewMovieInfo extends AsyncTask<MovieInfo, Void, MovieInfo>{
-
-        @Override
-        protected MovieInfo doInBackground(MovieInfo... movieInfos) {
-            MovieInfo movieInfo = null;
-            if(movieInfos.length>0){
-                movieInfo = movieInfos[0];
-            }
-            return movieInfo;
+            return mMovieData;
         }
 
         @Override
         protected void onPostExecute(MovieInfo movieInfo) {
             super.onPostExecute(movieInfo);
             if(movieInfo != null)
-            Picasso.with(mContext).
-                    load(MovieDBAPI.getApiImageUrl(movieInfo.posterpath)).
-                    placeholder(R.mipmap.loading_image_place_holder).
-                    error(R.mipmap.error_loading_image).
-                    into(imageView);
+                Picasso.with(mContext).
+                        load(MovieDBAPI.getApiImageUrl(movieInfo.posterpath)).
+                        placeholder(R.mipmap.loading_image_place_holder).
+                        error(R.mipmap.error_loading_image).
+                        into(imageView);
             titleView.setText(movieInfo.movie_title);
             descriptionView.setText(movieInfo.overview);
             popularityView.setText(movieInfo.popularity.toString());
             reviewView.setText(movieInfo.avg_vote.toString());
             releaseDateView.setText(movieInfo.release_data.toString());
             saveButton.setText((movieInfo.user_choice == 0)? getString(R.string.mark_as_fav) : getString(R.string.remove_from_fav));
+            reviewRecyler.setData(mReviewData);
+            videoRecycler.setData(mVideoData);
         }
     }
+
 
 }

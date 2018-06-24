@@ -17,7 +17,7 @@ public interface MovieInfoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(MovieInfo... movieInfo);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertAll(List<MovieInfo> movieInfos );
 
     @Query("SELECT * from "+BuildConfig.MOVIE_TABLE_NAME+" ORDER BY avg_vote ASC")

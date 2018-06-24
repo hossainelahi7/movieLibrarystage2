@@ -1,6 +1,7 @@
 package movielibrary.com.android.hossain.movieapplicationfragment.DataUtil;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,14 +30,16 @@ public class JsonUtil {
     }
 
     public static JSONArray convertReportToArray(@NonNull String data){
-        JSONObject responseJson = parseToJson(data);
         try {
+            JSONObject responseJson = parseToJson(data);
             if(responseJson.has("results")
                     && responseJson.getJSONArray("results").length()>0){
                 return responseJson.getJSONArray("results");
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        } catch (NullPointerException e){
+            Log.d("JsonUtil", e.getLocalizedMessage());
         }
         return null;
     }

@@ -26,12 +26,15 @@ public class DataSync {
                 }
             }
         }
+//        else {
+//            movieInfos.add(Translator.getSampleMovieInfo());
+//        }
         return movieInfos;
     }
 
     public static List<MovieInfo> syncTopMovies(){
         List<MovieInfo> movieInfos = new ArrayList<>();
-        JSONArray responseArray = JsonUtil.convertReportToArray(MovieDBAPI.getPopularMovieResponse());
+        JSONArray responseArray = JsonUtil.convertReportToArray(MovieDBAPI.getTopRatedMovieResponse());
         if(responseArray != null){
             for( int i = 0 ; i < responseArray.length(); i ++){
                 try {
@@ -40,6 +43,8 @@ public class DataSync {
                     Log.d(DataSync.class.getCanonicalName(), e.getMessage());
                 }
             }
+        }else {
+            movieInfos.add(Translator.getSampleMovieInfo());
         }
         return movieInfos;
     }
