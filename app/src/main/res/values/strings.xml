@@ -18,6 +18,4 @@
     <string name="mark_as_fav">Mark As Favorite</string>
     <string name="remove_from_fav">Remove From Favorite</string>
     <string name="unmark_as_Fav">Remove From Favorite</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

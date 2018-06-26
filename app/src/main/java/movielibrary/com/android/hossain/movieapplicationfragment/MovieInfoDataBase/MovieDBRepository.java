@@ -44,7 +44,6 @@ public class MovieDBRepository {
         List<MovieInfo> movieInfos = mMovieInfoDao.getTopMovies();
         if(movieInfos == null || movieInfos.size()<=0){
             movieInfos = DataSync.syncTopMovies();
-            mMovieInfoDao.insertAll(movieInfos);
             for (int i = 0; i < movieInfos.size(); i++){
                 MovieInfo temp = mMovieInfoDao.getMovieInfoDetails(movieInfos.get(i).movie_id);
                 if(temp!=null){

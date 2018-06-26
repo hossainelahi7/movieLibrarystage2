@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -31,16 +32,16 @@ import movielibrary.com.android.hossain.movieapplicationfragment.RecyclerView.Mo
  */
 public class MovieListViewFragment extends Fragment{
 
+    private String MOVIE_TYPE_KEY = "movie_type";
+
     private Context mContext;
     private MovieImageRecylerViewAdapter mMovieAdapter;
     private RecyclerView mMovieView;
     private LoadData loadData;
     private Integer movieType = Translator.POPUPAR_MOVIE;
-//    private Integer movieTypeLive = new MutableLiveData();
     private Button populerMovie;
     private Button topRatedMovie;
     private Button userListMovie;
-//    private LifecycleOwner lifecycleOwner;
     private List<MovieInfo> movieInfo;
 
     @Override
@@ -58,7 +59,9 @@ public class MovieListViewFragment extends Fragment{
     public void onActivityCreated(Bundle savedInstanceState) {
         mContext = getContext();
         super.onActivityCreated(savedInstanceState);
-//        movieTypeLive.setValue(movieType);
+        if(savedInstanceState!=null){
+            movieType = savedInstanceState.getInt(MOVIE_TYPE_KEY);
+        }
         mMovieView = getActivity().findViewById(R.id.movie_recycle_view);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
         mMovieView.setLayoutManager(layoutManager);
@@ -67,6 +70,27 @@ public class MovieListViewFragment extends Fragment{
         populerMovie = getActivity().findViewById(R.id.top_movie);
         topRatedMovie = getActivity().findViewById(R.id.top_rated_movie);
         userListMovie = getActivity().findViewById(R.id.user_listing);
+    }
+
+    private void reloadData(int movieType){
+        loadData = new LoadData();
+        loadData.execute(movieType);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         populerMovie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,37 +112,14 @@ public class MovieListViewFragment extends Fragment{
                 reloadData(movieType);
             }
         });
-    }
-
-    private void reloadData(int movieType){
-//        if(loadData.getStatus() != AsyncTask.Status.RUNNING){
-            loadData = new LoadData();
-            loadData.execute(movieType);
-//        }
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-//        loadData = new LoadData();
-//        loadData.execute(movieType);
-//        reloadData(movieType);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         reloadData(movieType);
     }
 
-
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(MOVIE_TYPE_KEY, movieType);
+    }
 
     private class LoadData extends AsyncTask<Integer, Void, Boolean> {
 
@@ -130,8 +131,6 @@ public class MovieListViewFragment extends Fragment{
 
         @Override
         protected Boolean doInBackground(Integer... ints) {
-//            if(ints.length<=0)
-//                return false;
             switch (ints[0]){
                 case Translator.POPUPAR_MOVIE:
                     movieInfo = MainActivity.movieDB.getPopularMovieInfoList();
@@ -166,19 +165,10 @@ public class MovieListViewFragment extends Fragment{
     @Override
     public void onStop() {
         super.onStop();
-//        movieType = movieTypeLive.getValue();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
     }
-
-//    private LifecycleOwner getLifecycleOwner(Context context) {
-//        while (!(context instanceof LifecycleOwner)) {
-//            context = ((ContextWrapper) context).getBaseContext();
-//        }
-//        return (LifecycleOwner) context;
-//    }
-
 }
