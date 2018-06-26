@@ -25,7 +25,7 @@ public class MovieDBRepository {
 
     public List<MovieInfo> getPopularMovieInfoList() {
         List<MovieInfo> movieInfos = mMovieInfoDao.getPopulerMovies();
-        if(movieInfos == null || movieInfos.size()<=0){
+        if(movieInfos == null || movieInfos.size()<=5){
             movieInfos = DataSync.syncPopularMovies();
                 for (int i = 0; i < movieInfos.size(); i++){
                     MovieInfo temp = mMovieInfoDao.getMovieInfoDetails(movieInfos.get(i).movie_id);
@@ -42,7 +42,7 @@ public class MovieDBRepository {
 
     public List<MovieInfo> getTopRatedMovieInfoList() {
         List<MovieInfo> movieInfos = mMovieInfoDao.getTopMovies();
-        if(movieInfos == null || movieInfos.size()<=0){
+        if(movieInfos == null || movieInfos.size()<=5){
             movieInfos = DataSync.syncTopMovies();
             for (int i = 0; i < movieInfos.size(); i++){
                 MovieInfo temp = mMovieInfoDao.getMovieInfoDetails(movieInfos.get(i).movie_id);
@@ -94,7 +94,8 @@ public class MovieDBRepository {
         List<VideoData> videoDataList = mMovieVideoDao.getVideoForMovie(movieID);
         if(videoDataList == null || videoDataList.size()<=0){
             videoDataList = DataSync.syncVideoData(movieID);
-            mMovieVideoDao.insertAll(videoDataList);
+            if(videoDataList!=null)
+                mMovieVideoDao.insertAll(videoDataList);
         }
         return videoDataList;
     }

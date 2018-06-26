@@ -152,7 +152,7 @@ public class MovieListViewFragment extends Fragment{
         protected void onPostExecute(Boolean aVoid) {
             super.onPostExecute(aVoid);
             mMovieAdapter.setMoviedata(movieInfo);
-            if(movieInfo.size() == 0)
+            if(movieInfo.size() <= 0)
                 Toast.makeText(mContext, "No entry found for this movie type selection", Toast.LENGTH_LONG);
         }
     }

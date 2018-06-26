@@ -9,7 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "MOVIE_API_KEY", "\"Add Your movie db key here\"")
+        buildConfigField("String", "MOVIE_API_KEY", "\"83265a52c0549c882baf9e94cb6a8640\"")
         buildConfigField("String", "MOVIE_TABLE_NAME", "\"movie_info_table\"")
         buildConfigField("String", "MOVIE_DB_NAME", "\"movie_info_db\"")
         buildConfigField("String", "MOVIE_VIDEO_TABLE_NAME", "\"movie_video_info_table\"")

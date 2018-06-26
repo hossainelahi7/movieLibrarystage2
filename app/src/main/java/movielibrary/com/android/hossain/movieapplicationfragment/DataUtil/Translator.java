@@ -92,11 +92,11 @@ public class Translator {
         return new ReviewData(Id, Author, Content, Url, movieId);
     }
 
-    public static MovieInfo getSampleMovieInfo(){
-            return new MovieInfo(0, 0, 0, 0.0, "", 0.0, "",
-                    "", "", "", 0, " ", " ",0,
-                    0, 0 );
-    }
+//    public static MovieInfo getSampleMovieInfo(){
+//            return new MovieInfo(0, 0, 0, 0.0, "", 0.0, "",
+//                    "", "", "", 0, " ", " ",0,
+//                    0, 0 );
+//    }
 
 //    public static VideoData
 }

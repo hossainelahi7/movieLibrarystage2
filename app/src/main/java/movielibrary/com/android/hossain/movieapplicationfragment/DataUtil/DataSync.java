@@ -43,9 +43,10 @@ public class DataSync {
                     Log.d(DataSync.class.getCanonicalName(), e.getMessage());
                 }
             }
-        }else {
-            movieInfos.add(Translator.getSampleMovieInfo());
         }
+//        else {
+//            movieInfos.add(Translator.getSampleMovieInfo());
+//        }
         return movieInfos;
     }
 
@@ -72,6 +73,8 @@ public class DataSync {
         String movieVideoDataResponse = MovieDBAPI.getMovieTrailerResponse(movieId);
         if(movieVideoDataResponse != null){
             JSONArray responseArray = JsonUtil.convertReportToArray(movieVideoDataResponse);
+            if(responseArray == null || responseArray.length()<=0)
+                return null;
             for(int i= 0; i < responseArray.length(); i++){
                 try {
                     movieDataList.add(Translator.convertToVideoData(responseArray.getJSONObject(i), movieId));
