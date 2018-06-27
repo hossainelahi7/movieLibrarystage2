@@ -17,19 +17,13 @@ public interface MovieInfoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(MovieInfo... movieInfo);
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertAll(List<MovieInfo> movieInfos );
-
-    @Query("SELECT * from "+BuildConfig.MOVIE_TABLE_NAME+" ORDER BY avg_vote ASC")
-    List<MovieInfo> getAllMovies();
-
-    @Query("SELECT * from "+BuildConfig.MOVIE_TABLE_NAME+" WHERE populer_movie = 1 ORDER BY avg_vote ASC")
+    @Query("SELECT * from "+BuildConfig.MOVIE_TABLE_NAME+" WHERE populer_movie = 1 ORDER BY popularity DESC")
     List<MovieInfo> getPopulerMovies();
 
-    @Query("SELECT * from "+BuildConfig.MOVIE_TABLE_NAME+" WHERE top_movie = 1 ORDER BY avg_vote ASC")
+    @Query("SELECT * from "+BuildConfig.MOVIE_TABLE_NAME+" WHERE top_movie = 1 ORDER BY vote_count DESC")
     List<MovieInfo> getTopMovies();
 
-    @Query("SELECT * from "+BuildConfig.MOVIE_TABLE_NAME+" WHERE user_choice = 1 ORDER BY avg_vote ASC")
+    @Query("SELECT * from "+BuildConfig.MOVIE_TABLE_NAME+" WHERE user_choice = 1 ORDER BY avg_vote DESC")
     List<MovieInfo> getUserChoiceMovies();
 
     @Delete
