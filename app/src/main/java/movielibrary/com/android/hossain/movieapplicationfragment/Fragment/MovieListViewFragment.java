@@ -33,6 +33,7 @@ import movielibrary.com.android.hossain.movieapplicationfragment.RecyclerView.Mo
 public class MovieListViewFragment extends Fragment{
 
     private String MOVIE_TYPE_KEY = "movie_type";
+    private String LAYOUT_POSITION_KEY = "layout_position";
 
     private Context mContext;
     private MovieImageRecylerViewAdapter mMovieAdapter;
@@ -43,6 +44,8 @@ public class MovieListViewFragment extends Fragment{
     private Button topRatedMovie;
     private Button userListMovie;
     private List<MovieInfo> movieInfo;
+    private GridLayoutManager layoutManager;
+    private int layoutPos = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,9 +64,10 @@ public class MovieListViewFragment extends Fragment{
         super.onActivityCreated(savedInstanceState);
         if(savedInstanceState!=null){
             movieType = savedInstanceState.getInt(MOVIE_TYPE_KEY);
+            layoutPos = savedInstanceState.getInt(LAYOUT_POSITION_KEY);
         }
         mMovieView = getActivity().findViewById(R.id.movie_recycle_view);
-        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
+        layoutManager = new GridLayoutManager(getContext(), 3);
         mMovieView.setLayoutManager(layoutManager);
         mMovieAdapter = new MovieImageRecylerViewAdapter();
         mMovieView.setAdapter(mMovieAdapter);
@@ -72,9 +76,9 @@ public class MovieListViewFragment extends Fragment{
         userListMovie = getActivity().findViewById(R.id.user_listing);
     }
 
-    private void reloadData(int movieType){
+    private void reloadData(int movieType, int position){
         loadData = new LoadData();
-        loadData.execute(movieType);
+        loadData.execute(movieType, position);
     }
 
     @Override
@@ -95,33 +99,39 @@ public class MovieListViewFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 movieType = Translator.POPUPAR_MOVIE;
-                reloadData(movieType);
+                layoutPos = 0;
+                reloadData(movieType, layoutPos);
             }
         });
         topRatedMovie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 movieType = Translator.TOP_RATED_MOVIE;
-                reloadData(movieType);
+                layoutPos = 0;
+                reloadData(movieType, layoutPos);
             }
         });
         userListMovie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 movieType = Translator.USER_LISTED;
-                reloadData(movieType);
+                layoutPos = 0;
+                reloadData(movieType, layoutPos);
             }
         });
-        reloadData(movieType);
+        reloadData(movieType, layoutPos);
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(MOVIE_TYPE_KEY, movieType);
+        int LayoutPosition = layoutManager.findFirstVisibleItemPosition();
+        outState.putInt(LAYOUT_POSITION_KEY, LayoutPosition);
     }
 
     private class LoadData extends AsyncTask<Integer, Void, Boolean> {
+        int location = 0;
 
         @Override
         protected void onPreExecute() {
@@ -131,6 +141,9 @@ public class MovieListViewFragment extends Fragment{
 
         @Override
         protected Boolean doInBackground(Integer... ints) {
+            if(ints == null || ints.length<=0){
+                return null;
+            }
             switch (ints[0]){
                 case Translator.POPUPAR_MOVIE:
                     movieInfo = MainActivity.movieDB.getPopularMovieInfoList();
@@ -145,6 +158,9 @@ public class MovieListViewFragment extends Fragment{
                     movieInfo = MainActivity.movieDB.getPopularMovieInfoList();
                     break;
             }
+            if(ints.length>1){
+                location = ints[1];
+            }
             return true;
         }
 
@@ -154,6 +170,7 @@ public class MovieListViewFragment extends Fragment{
             mMovieAdapter.setMoviedata(movieInfo);
             if(movieInfo.size() <= 0)
                 Toast.makeText(mContext, "No entry found for this movie type selection", Toast.LENGTH_LONG);
+                layoutManager.scrollToPosition(location);
         }
     }
 
