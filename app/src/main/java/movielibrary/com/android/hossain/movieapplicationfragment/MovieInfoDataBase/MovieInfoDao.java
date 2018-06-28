@@ -20,10 +20,10 @@ public interface MovieInfoDao {
     @Query("SELECT * from "+BuildConfig.MOVIE_TABLE_NAME+" WHERE populer_movie = 1 ORDER BY popularity DESC")
     List<MovieInfo> getPopulerMovies();
 
-    @Query("SELECT * from "+BuildConfig.MOVIE_TABLE_NAME+" WHERE top_movie = 1 ORDER BY avg_vote DESC")
+    @Query("SELECT * from "+BuildConfig.MOVIE_TABLE_NAME+" WHERE top_movie = 1 ORDER BY avg_vote DESC, vote_count DESC")
     List<MovieInfo> getTopMovies();
 
-    @Query("SELECT * from "+BuildConfig.MOVIE_TABLE_NAME+" WHERE user_choice = 1 ORDER BY avg_vote DESC")
+    @Query("SELECT * from "+BuildConfig.MOVIE_TABLE_NAME+" WHERE user_choice = 1 ORDER BY movie_title ASC")
     List<MovieInfo> getUserChoiceMovies();
 
     @Delete

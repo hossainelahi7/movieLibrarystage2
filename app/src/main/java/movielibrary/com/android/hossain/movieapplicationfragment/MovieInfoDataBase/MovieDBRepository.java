@@ -36,6 +36,7 @@ public class MovieDBRepository {
                         mMovieInfoDao.insert(movieInfos.get(i));
                     }
                 }
+            movieInfos = mMovieInfoDao.getPopulerMovies();
         }
         return movieInfos;
     }
@@ -53,7 +54,7 @@ public class MovieDBRepository {
                     mMovieInfoDao.insert(movieInfos.get(i));
                 }
             }
-
+            movieInfos = mMovieInfoDao.getTopMovies();
         }
         return movieInfos;
     }
